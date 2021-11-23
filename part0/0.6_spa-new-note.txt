@@ -1,0 +1,20 @@
+title 0.6: Single Page App - New Note
+
+note over browser:
+user enters content into the text field
+and clicks the submit button
+end note
+
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+
+note over server:
+server responds with HTTP status code 201,
+which does not force the page to reload
+end note
+
+server-->browser: HTTP status code 201 and {"message":"note created"}
+
+note over browser:
+browser executes the event handler
+that renders notes to display
+end note
