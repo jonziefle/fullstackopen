@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import personService from './services/persons'
+
+import Notification from './components/Notification'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import PersonList from './components/PersonList'
@@ -9,6 +11,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
+  const [message, setMessage] = useState({})
 
   useEffect(() => {
     personService
@@ -36,11 +39,12 @@ const App = () => {
         .updateEntry(personToBeUpdated.id, personObject)
         .then(returnedPerson => {
           setPersons(persons.map(person => person.id !== personToBeUpdated.id ? person : returnedPerson))
+          displayMessage(`Updated ${returnedPerson.name}`, 'message')
           setNewName('')
           setNewNumber('')
         })
         .catch(error => {
-          console.log(`${personToBeUpdated.name} could not be updated`)
+          displayMessage(`Could not update ${personObject.name}`, 'error')
         })
       }
     } else {
@@ -48,11 +52,12 @@ const App = () => {
         .addEntry(personObject)
         .then(returnedPerson => {
           setPersons(persons.concat(returnedPerson))
+          displayMessage(`Added ${returnedPerson.name}`, 'message')
           setNewName('')
           setNewNumber('')
         })
         .catch(error => {
-          console.log(`${newName} could not be added`)
+          displayMessage(`Could not add ${personObject.name}`, 'error')
         })
     }
   }
@@ -64,11 +69,19 @@ const App = () => {
         .deleteEntry(id)
         .then(() => {
           setPersons(persons.filter(person => person.id !== id))
+          displayMessage(`Deleted ${personToBeDeleted.name}`, 'message')
         })
         .catch(error => {
-          console.log(`${personToBeDeleted.name} could not be deleted`)
+          displayMessage(`Could not delete ${personToBeDeleted.name}`, 'error')
         })
     }
+  }
+
+  const displayMessage =  (text, type) => {
+    setMessage({text, type})
+    setTimeout(() => {
+      setMessage({})
+    }, 5000)
   }
 
   const handleNameChange = (event) => setNewName(event.target.value)
@@ -82,6 +95,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} />
       <Filter filter={filter} 
               handleFilterChange={handleFilterChange} />
       <h3>Add a New Person</h3>
