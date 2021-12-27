@@ -1,10 +1,11 @@
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config()
+}
+
 const express = require('express')
-const cors = require('cors')
 const morgan = require('morgan')
-
+const cors = require('cors')
 const app = express()
-
-require('dotenv').config()
 const Person = require('./models/person')
 
 app.use(cors())
@@ -37,10 +38,12 @@ app.get('/info', (request, response) => {
 })
 
 // get all persons
-app.get('/api/persons', (request, response) => {
-    Person.find({}).then(persons => {
-        response.json(persons)
-    })
+app.get('/api/persons', (request, response, next) => {
+    Person.find({})
+        .then(persons => {
+            response.json(persons)
+        })
+        .catch(error => next(error))
 })
 
 // get person by id
@@ -59,16 +62,16 @@ app.get('/api/persons/:id', (request, response, next) => {
 // add person
 app.post('/api/persons', (request, response, next) => {
     const body = request.body
-  
+
     if (body.name === undefined || body.number === undefined) {
-      return response.status(400).json({ error: 'content missing' })
+        return response.status(400).json({ error: 'content missing' })
     }
 
     const person = new Person({
         name: body.name,
         number: body.number
     })
-  
+
     person.save()
         .then(savedPerson => {
             response.json(savedPerson)
@@ -79,12 +82,12 @@ app.post('/api/persons', (request, response, next) => {
 // update person
 app.put('/api/persons/:id', (request, response, next) => {
     const body = request.body
-  
+
     const person = {
         number: body.number
     }
-  
-    Person.findByIdAndUpdate(request.params.id, person, { new: true })
+
+    Person.findByIdAndUpdate(request.params.id, person, { runValidators: true, new: true })
         .then(updatedPerson => {
             response.json(updatedPerson)
         })
@@ -109,17 +112,19 @@ app.use(unknownEndpoint)
 
 // handle errors
 const errorHandler = (error, request, response, next) => {
-    console.error(error.message)
-  
+    console.error(`${error.name} | ${error.message}`)
+
     if (error.name === 'CastError') {
         return response.status(400).send({ error: 'malformatted id' })
-    } 
-  
+    } else if (error.name === 'ValidationError') {
+        return response.status(400).json({ error: error.message })
+    }
+
     next(error)
 }
 
 app.use(errorHandler)
-  
+
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
