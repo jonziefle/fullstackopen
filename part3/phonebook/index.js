@@ -4,6 +4,9 @@ const morgan = require('morgan')
 
 const app = express()
 
+require('dotenv').config()
+const Person = require('./models/person')
+
 app.use(cors())
 app.use(express.json())
 app.use(express.static('build'))
@@ -37,19 +40,6 @@ let persons = [
     }
 ]
 
-// generates random IDs
-const generateId = () => {
-    const min = 1
-    const max = Math.pow(2,20)
-    
-    let id
-    do {
-        id = Math.floor(Math.random() * (max - min + 1) + min)
-    } while (persons.some((person) => person.id === id))
-
-    return id
-}
-
 // get base server route
 app.get('/', (request, response) => {
     response.send('<h1>Phonebook API</h1>')
@@ -69,42 +59,34 @@ app.get('/info', (request, response) => {
 
 // get all persons
 app.get('/api/persons', (request, response) => {
-    response.json(persons)
+    Person.find({}).then(persons => {
+        response.json(persons)
+    })
 })
 
 // get person by id
 app.get('/api/persons/:id', (request, response) => {
-    const id = Number(request.params.id)
-    const person = persons.find(person => person.id === id)
-    
-    if (person) {
+    Person.findById(request.params.id).then(person => {
         response.json(person)
-    } else {
-        response.status(404).end()
-    }
+    })
 })
 
 // add person
 app.post('/api/persons', (request, response) => {
     const body = request.body
   
-    if (!body.name || !body.number) {
-        return response.status(400).json({ error: 'The name or number is missing.' })
+    if (body.name === undefined || body.number === undefined) {
+      return response.status(400).json({ error: 'content missing' })
     }
 
-    if (persons.some(person => person.name === body.name)) {
-        return response.status(400).json({ error: 'The name already exists.' })
-    }
-  
-    const person = {
-        id: generateId(),
+    const person = new Person({
         name: body.name,
         number: body.number
-    }
+    })
   
-    persons = persons.concat(person)
-  
-    response.json(person)
+    person.save().then(savedPerson => {
+        response.json(savedPerson)
+    })
 })
 
 // delete person
