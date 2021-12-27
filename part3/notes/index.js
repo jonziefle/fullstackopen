@@ -1,4 +1,6 @@
-require('dotenv').config()
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config()
+}
 const express = require('express')
 const app = express()
 const Note = require('./models/note')
@@ -6,8 +8,8 @@ const Note = require('./models/note')
 const cors = require('cors')
 app.use(cors())
 
-app.use(express.json())
 app.use(express.static('build'))
+app.use(express.json())
 
 // log requests
 const requestLogger = (request, response, next) => {
@@ -61,7 +63,7 @@ app.post('/api/notes', (request, response, next) => {
 
     note.save()
         .then(savedNote => savedNote.toJSON())
-        .then(savedAndFormattedNote  => {
+        .then(savedAndFormattedNote => {
             response.json(savedAndFormattedNote)
         })
         .catch(error => next(error))
