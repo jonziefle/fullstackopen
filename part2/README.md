@@ -14,7 +14,7 @@ Update the course information app from part1.
 * https://fullstackopen.com/en/part2/rendering_a_collection_modules#exercises-2-1-2-5
 
 ### **2.6-2.11, 2.15-2.20: Phonebook**
-Create a simple phonebook, giving the user the ability to add newn numbers and filter existing numbers.
+Create a simple phonebook, giving the user the ability to add new numbers and filter existing numbers.
 * https://fullstackopen.com/en/part2/forms#exercises-2-6-2-10
 
 Update the phonebook to store data on the server.
