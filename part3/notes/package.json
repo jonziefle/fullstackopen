@@ -6,13 +6,13 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
     "heroku:switch": "heroku git:remote -a young-springs-62930",
     "build:ui": "rm -rf build && cd ../../part2/notes && npm run build && cp -r build ../../part3/notes",
     "deploy": "cd ../../ && git subtree push --prefix part3/notes heroku main",
     "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push && npm run deploy",
     "logs:prod": "heroku logs --tail",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test": "jest --verbose"
   },
   "author": "Jon Ziefle",
   "license": "MIT",
@@ -24,6 +24,10 @@
   },
   "devDependencies": {
     "eslint": "^8.5.0",
+    "jest": "^27.4.5",
     "nodemon": "^2.0.15"
+  },
+  "jest": {
+    "testEnvironment": "node"
   }
 }
