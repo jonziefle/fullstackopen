@@ -1,0 +1,9 @@
+PUT http://localhost:3003/api/blogs/61cbe63c9bde1376f6d09117
+Content-Type: application/json
+
+{
+    "title": "Blogs: What are they good for?",
+    "author": "Jim Riggins",
+    "url": "https://www.blogsrus.com/jimriggins/blogs-what-are-they-good-for",
+    "likes": 1000
+}
