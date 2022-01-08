@@ -45,7 +45,7 @@ describe('testing users api', () => {
             expect(usernames).toContain(newUser.username)
         })
 
-        test('creation fails with proper statuscode and message if username already taken', async () => {
+        test('creation fails if username is not unique', async () => {
             const usersAtStart = await helper.usersInDb()
 
             const newUser = {
@@ -98,7 +98,7 @@ describe('testing login api', () => {
             expect(result.body).toHaveProperty('token')
         })
 
-        test('user login information recieved with valid credentials', async () => {
+        test('error recieved with invalid credentials', async () => {
             const loginInfo = {
                 username: 'root',
                 password: 'wrong-password',
@@ -199,7 +199,7 @@ describe('testing notes api', () => {
 
             await api
                 .post('/api/notes')
-                .set('Authorization', 'bearer ' + loginCredentials.token)
+                .set('Authorization', `bearer ${loginCredentials.token}`)
                 .send(newNote)
                 .expect(200)
                 .expect('Content-Type', /application\/json/)
@@ -233,7 +233,7 @@ describe('testing notes api', () => {
 
             await api
                 .post('/api/notes')
-                .set('Authorization', 'bearer ' + loginCredentials.token)
+                .set('Authorization', `bearer ${loginCredentials.token}`)
                 .send(newNote)
                 .expect(400)
 
@@ -259,8 +259,6 @@ describe('testing notes api', () => {
         })
     })
 })
-
-
 
 afterAll(() => {
     mongoose.connection.close()
