@@ -17,8 +17,6 @@ Create a collection of helper functions that are meant to assist dealing with th
 
 Use supertest and Jest to set up automated tests for the API.
 * https://fullstackopen.com/en/part4/testing_the_backend#exercises-4-8-4-12
-
-Refactor tests using async/await.
 * https://fullstackopen.com/en/part4/testing_the_backend#exercises-4-13-4-14
 
 Add user administration and token authentication to the blog list API
