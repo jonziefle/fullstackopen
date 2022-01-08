@@ -1,9 +1,11 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXJuYW1lMSIsImlkIjoiNjFkOGZjYTNkOGRhNWJlZjdjNzI2MzRkIiwiaWF0IjoxNjQxNjEwNDQ4LCJleHAiOjE2NDE2MTQwNDh9.jw-cupntF-A0xgJKumHIVPiOhp5FbESY1TskpkWR1z8
 
 {
-    "title": "Blogs: What are they good for?",
-    "author": "Jim Riggins",
-    "url": "https://www.blogsrus.com/jimriggins/blogs-what-are-they-good-for",
-    "likes": 13
+    "title": "This is the blog that never ends",
+    "author": "Lambchop",
+    "url": "https://www.google.com/blogs",
+    "likes": 13,
+    "userId": "61d7c537b5c93db1b5b5217c"
 }
