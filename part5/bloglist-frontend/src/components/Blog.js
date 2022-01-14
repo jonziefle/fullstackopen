@@ -24,7 +24,7 @@ const Blog = ({ user, blog, updateBlog, deleteBlog }) => {
 
     return (
         <div className='blog'>
-            "{blog.title}" by {blog.author}
+            {`"${blog.title}" by ${blog.author}`}
             <button onClick={toggleVisibility}>{visible ? 'hide' : 'view'}</button>
             <div style={showWhenVisible}>
                 <div>
