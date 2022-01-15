@@ -25,19 +25,19 @@ const Blog = ({ user, blog, updateBlog, deleteBlog }) => {
     return (
         <div className='blog'>
             {`"${blog.title}" by ${blog.author}`}
-            <button onClick={toggleVisibility}>{visible ? 'hide' : 'view'}</button>
-            <div style={showWhenVisible}>
+            <button className='toggle-button' onClick={toggleVisibility}>{visible ? 'hide' : 'view'}</button>
+            <div className='additional-content' style={showWhenVisible}>
                 <div>
                     url: {blog.url}
                 </div>
                 <div>
-                    likes: {blog.likes}<button onClick={incrementLikes}>like</button>
+                    likes: {blog.likes}<button className='like-button' onClick={incrementLikes}>like</button>
                 </div>
                 <div>
                     user: {blog.user ? blog.user.name : ''}
                 </div>
                 {blog.user && blog.user.username === user.username &&
-                    < button onClick={removeBlog}>remove</button>
+                    <button onClick={removeBlog}>remove</button>
                 }
             </div>
         </div >
