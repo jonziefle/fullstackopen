@@ -107,7 +107,7 @@ const App = () => {
     )
 
     const noteForm = () => (
-        <Togglable buttonLabel="new note" ref={noteFormRef}>
+        <Togglable buttonLabel="new note button" ref={noteFormRef}>
             <NoteForm createNote={addNote} />
         </Togglable>
     )
@@ -120,7 +120,7 @@ const App = () => {
             {user === null ?
                 loginForm() :
                 <div>
-                    <p>{user.name} logged-in</p>
+                    <p>{user.name} is logged in</p>
                     {noteForm()}
                 </div>
             }
