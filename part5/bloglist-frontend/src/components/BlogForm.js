@@ -9,7 +9,6 @@ const BlogForm = ({ createBlog }) => {
     const handleAuthorChange = (event) => setNewAuthor(event.target.value)
     const handleURLChange = (event) => setNewURL(event.target.value)
 
-
     const addBlog = (event) => {
         event.preventDefault()
         createBlog({
@@ -45,7 +44,9 @@ const BlogForm = ({ createBlog }) => {
                         value={newURL}
                         onChange={handleURLChange} />
                 </div>
-                <button type="submit">create</button>
+                <button
+                    className='save-button'
+                    type="submit">create</button>
             </form>
         </div>
     )

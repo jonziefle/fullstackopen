@@ -48,7 +48,7 @@ const App = () => {
 
             blogService.setToken(user.token)
             setUser(user)
-            displayMessage(`${username} logged in`, 'message')
+            displayMessage(`${user.name} is logged in`, 'message')
             setUsername('')
             setPassword('')
         } catch (exception) {
@@ -135,7 +135,7 @@ const App = () => {
     )
 
     const blogList = () => (
-        <>
+        <div className='blog-list'>
             <h3>List</h3>
             {blogs
                 .sort((a, b) => b.likes - a.likes)
@@ -147,7 +147,7 @@ const App = () => {
                         updateBlog={updateBlog}
                         deleteBlog={deleteBlog} />
                 )}
-        </>
+        </div>
     )
 
     return (
