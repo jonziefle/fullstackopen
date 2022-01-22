@@ -8,7 +8,7 @@ In this part we return to the frontend, first looking at different possibilities
 * [End to end testing](https://fullstackopen.com/en/part5/end_to_end_testing)
 
 ## Exercises:
-### **4.1-4.23: Blog List**
+### **5.1-5.22: Blog List**
 Create a frontend for the blog list app.
 * https://fullstackopen.com/en/part5/login_in_frontend#exercises-5-1-5-4
 
