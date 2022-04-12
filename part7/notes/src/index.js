@@ -5,7 +5,6 @@ import {
     BrowserRouter as Router,
     Routes,
     Route,
-    Link,
     Navigate,
     useMatch
 } from "react-router-dom"
@@ -18,7 +17,8 @@ import Login from './components/Login'
 import Home from './components/Home'
 import Footer from './components/Footer'
 
-import { Alert } from 'react-bootstrap'
+import { Container } from '@material-ui/core'
+import { Alert } from '@material-ui/lab'
 
 const App = () => {
     const [notes, setNotes] = useState([
@@ -61,9 +61,9 @@ const App = () => {
     }
 
     return (
-        <div className="container">
+        <Container>
             {(message &&
-                <Alert variant="success">
+                <Alert severity="success">
                     {message}
                 </Alert>
             )}
@@ -76,7 +76,7 @@ const App = () => {
                 <Route path="/" element={<Home />} />
             </Routes>
             <Footer />
-        </div>
+        </Container>
     )
 }
 

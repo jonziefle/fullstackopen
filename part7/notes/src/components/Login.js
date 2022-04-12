@@ -1,5 +1,8 @@
 import { useNavigate } from "react-router-dom"
-import { Form, Button } from 'react-bootstrap'
+import {
+    TextField,
+    Button
+} from '@material-ui/core'
 
 const Login = (props) => {
     const navigate = useNavigate()
@@ -13,23 +16,25 @@ const Login = (props) => {
     return (
         <div>
             <h2>login</h2>
-            <Form onSubmit={onSubmit}>
-                <Form.Group>
-                    <Form.Label>username:</Form.Label>
-                    <Form.Control
-                        type="text"
+            <form onSubmit={onSubmit}>
+                <div>
+                    <TextField
+                        label="username"
                         name="username"
-                    />
-                    <Form.Label>password:</Form.Label>
-                    <Form.Control
-                        type="password"
+                        type="text" />
+                </div>
+                <div>
+                    <TextField
+                        label="password"
                         name="password"
-                    />
-                    <Button variant="primary" type="submit">
+                        type="password" />
+                </div>
+                <div>
+                    <Button variant="contained" color="primary" type="submit">
                         login
                     </Button>
-                </Form.Group>
-            </Form >
+                </div>
+            </form>
         </div>
     )
 }
