@@ -1,32 +1,26 @@
 import { Link } from "react-router-dom"
-import {
-    AppBar,
-    Toolbar,
-    IconButton,
-    Button
-} from '@material-ui/core'
+import styled from 'styled-components'
+
+const StyledNavigation = styled.div`
+  background: BurlyWood;
+  padding: 1em;
+`
 
 const Navigation = ({ user }) => {
+    const padding = {
+        padding: 5
+    }
+
     return (
-        <AppBar position="static">
-            <Toolbar>
-                <Button color="inherit" component={Link} to="/">
-                    home
-                </Button>
-                <Button color="inherit" component={Link} to="/notes">
-                    notes
-                </Button>
-                <Button color="inherit" component={Link} to="/users">
-                    users
-                </Button>
-                {user
-                    ? <em>{user} logged in</em>
-                    : <Button color="inherit" component={Link} to="/login">
-                        login
-                    </Button>
-                }
-            </Toolbar>
-        </AppBar>
+        <StyledNavigation>
+            <Link style={padding} to="/">home</Link>
+            <Link style={padding} to="/notes">notes</Link>
+            <Link style={padding} to="/users">users</Link>
+            {user
+                ? <em>{user} logged in</em>
+                : <Link style={padding} to="/login">login</Link>
+            }
+        </StyledNavigation>
     )
 }
 

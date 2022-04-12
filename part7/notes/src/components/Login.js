@@ -1,8 +1,19 @@
 import { useNavigate } from "react-router-dom"
-import {
-    TextField,
-    Button
-} from '@material-ui/core'
+
+import styled from 'styled-components'
+
+const Button = styled.button`
+  background: Bisque;
+  font-size: 1em;
+  margin: 1em;
+  padding: 0.25em 1em;
+  border: 2px solid Chocolate;
+  border-radius: 3px;
+`
+
+const Input = styled.input`
+  margin: 0.25em;
+`
 
 const Login = (props) => {
     const navigate = useNavigate()
@@ -18,22 +29,14 @@ const Login = (props) => {
             <h2>login</h2>
             <form onSubmit={onSubmit}>
                 <div>
-                    <TextField
-                        label="username"
-                        name="username"
-                        type="text" />
+                    username:
+                    <Input name="username" type="text"/>
                 </div>
                 <div>
-                    <TextField
-                        label="password"
-                        name="password"
-                        type="password" />
+                    password:
+                    <Input name="password" type="password" />
                 </div>
-                <div>
-                    <Button variant="contained" color="primary" type="submit">
-                        login
-                    </Button>
-                </div>
+                <Button type="submit" primary=''>login</Button>
             </form>
         </div>
     )

@@ -17,8 +17,14 @@ import Login from './components/Login'
 import Home from './components/Home'
 import Footer from './components/Footer'
 
-import { Container } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
+
+import styled from 'styled-components'
+
+const Page = styled.div`
+  padding: 1em;
+  background: papayawhip;
+`
 
 const App = () => {
     const [notes, setNotes] = useState([
@@ -61,7 +67,7 @@ const App = () => {
     }
 
     return (
-        <Container>
+        <Page>
             {(message &&
                 <Alert severity="success">
                     {message}
@@ -76,7 +82,7 @@ const App = () => {
                 <Route path="/" element={<Home />} />
             </Routes>
             <Footer />
-        </Container>
+        </Page>
     )
 }
 
