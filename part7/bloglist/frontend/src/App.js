@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useDispatch } from "react-redux";
 
 import Blog from "./components/Blog";
 import Notification from "./components/Notification";
@@ -9,14 +10,16 @@ import Togglable from "./components/Togglable";
 import loginService from "./services/login";
 import blogService from "./services/blogs";
 
-const App = () => {
-  const [blogs, setBlogs] = useState([]);
-  const [message, setMessage] = useState({});
+import { setNotification } from "./reducers/notificationReducer";
 
+const App = () => {
+  const dispatch = useDispatch();
+
+  const [blogs, setBlogs] = useState([]);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
-
+  
   const blogFormRef = useRef();
 
   useEffect(() => {
@@ -45,11 +48,11 @@ const App = () => {
 
       blogService.setToken(user.token);
       setUser(user);
-      displayMessage(`${user.name} is logged in`, "message");
+      dispatch(setNotification(`${user.name} is logged in`, "message"));
       setUsername("");
       setPassword("");
     } catch (exception) {
-      displayMessage(`Unable to login ${username}`, "error");
+      dispatch(setNotification(`Unable to login ${username}`, "error"));
     }
   };
 
@@ -58,7 +61,7 @@ const App = () => {
 
     window.localStorage.removeItem("authorizedUser");
     blogService.setToken(null);
-    displayMessage(`${user.username} logged out`, "message");
+    dispatch(setNotification(`${user.username} logged out`, "message"));
     setUser(null);
   };
 
@@ -68,14 +71,18 @@ const App = () => {
       setBlogs(blogs.concat(newBlog));
       blogFormRef.current.toggleVisibility();
 
-      displayMessage(
-        `Added new blog "${blogObject.title}" by ${blogObject.author}`,
-        "message"
+      dispatch(
+        setNotification(
+          `Added new blog "${blogObject.title}" by ${blogObject.author}`,
+          "message"
+        )
       );
     } catch (exception) {
-      displayMessage(
-        `Unable to add blog "${blogObject.title}" by ${blogObject.author}`,
-        "error"
+      dispatch(
+        setNotification(
+          `Unable to add blog "${blogObject.title}" by ${blogObject.author}`,
+          "error"
+        )
       );
     }
   };
@@ -87,14 +94,18 @@ const App = () => {
         blogs.map((blog) => (blog.id !== blogObject.id ? blog : updatedBlog))
       );
 
-      displayMessage(
-        `Added like to "${blogObject.title}" by ${blogObject.author}`,
-        "message"
+      dispatch(
+        setNotification(
+          `Added like to "${blogObject.title}" by ${blogObject.author}`,
+          "message"
+        )
       );
     } catch (exception) {
-      displayMessage(
-        `Unable to add like to "${blogObject.title}" by ${blogObject.author}`,
-        "error"
+      dispatch(
+        setNotification(
+          `Unable to add like to "${blogObject.title}" by ${blogObject.author}`,
+          "error"
+        )
       );
     }
   };
@@ -107,24 +118,21 @@ const App = () => {
         await blogService.remove(blogObject.id);
         setBlogs(blogs.filter((blog) => blog.id !== blogObject.id));
 
-        displayMessage(
-          `Deleted "${blogObject.title}" by ${blogObject.author}`,
-          "message"
+        dispatch(
+          setNotification(
+            `Deleted "${blogObject.title}" by ${blogObject.author}`,
+            "message"
+          )
         );
       } catch (exception) {
-        displayMessage(
-          `Unable to delete "${blogObject.title}" by ${blogObject.author}`,
-          "error"
+        dispatch(
+          setNotification(
+            `Unable to delete "${blogObject.title}" by ${blogObject.author}`,
+            "error"
+          )
         );
       }
     }
-  };
-
-  const displayMessage = (text, type) => {
-    setMessage({ text, type });
-    setTimeout(() => {
-      setMessage({});
-    }, 5000);
   };
 
   const loginForm = () => (
@@ -173,7 +181,7 @@ const App = () => {
   return (
     <div>
       <h2>Blog List App</h2>
-      <Notification message={message} />
+      <Notification />
 
       {user === null ? (
         <div>{loginForm()}</div>
