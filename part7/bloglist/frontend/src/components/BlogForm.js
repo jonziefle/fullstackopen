@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const BlogForm = ({ createBlog }) => {
+const BlogForm = ({ addBlog }) => {
   const [newTitle, setNewTitle] = useState("");
   const [newAuthor, setNewAuthor] = useState("");
   const [newURL, setNewURL] = useState("");
@@ -9,9 +9,9 @@ const BlogForm = ({ createBlog }) => {
   const handleAuthorChange = (event) => setNewAuthor(event.target.value);
   const handleURLChange = (event) => setNewURL(event.target.value);
 
-  const addBlog = (event) => {
+  const handleForm = (event) => {
     event.preventDefault();
-    createBlog({
+    addBlog({
       title: newTitle,
       author: newAuthor,
       url: newURL,
@@ -25,7 +25,7 @@ const BlogForm = ({ createBlog }) => {
   return (
     <div>
       <h3>Add a New Blog</h3>
-      <form className="blog-form" onSubmit={addBlog}>
+      <form className="blog-form" onSubmit={handleForm}>
         <div>
           title:
           <input

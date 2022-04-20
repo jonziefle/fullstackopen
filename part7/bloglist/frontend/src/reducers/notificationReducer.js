@@ -7,25 +7,24 @@ const notificationSlice = createSlice({
   name: "notification",
   initialState,
   reducers: {
-    // eslint-disable-next-line
-    showNotification(state, action) {
+    show(state, action) {
       return action.payload;
     },
     // eslint-disable-next-line
-    hideNotification(state, action) {
+    hide(state, action) {
       return null;
     },
   },
 });
 
-const { showNotification, hideNotification } = notificationSlice.actions;
+const { show, hide } = notificationSlice.actions;
 
 export const setNotification = (text, type) => {
   return (dispatch) => {
     clearTimeout(timer);
-    dispatch(showNotification({ text, type }));
+    dispatch(show({ text, type }));
     timer = setTimeout(() => {
-      dispatch(hideNotification());
+      dispatch(hide());
     }, 5000);
   };
 };

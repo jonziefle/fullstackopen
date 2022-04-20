@@ -1,34 +1,30 @@
 import React from "react";
-import PropTypes from "prop-types";
+import { useDispatch } from "react-redux";
+import { loginUser } from "../reducers/authReducer";
 
-const LoginForm = ({
-  handleSubmit,
-  handleUsernameChange,
-  handlePasswordChange,
-  username,
-  password,
-}) => {
+const LoginForm = () => {
+  const dispatch = useDispatch();
+
+  const handleLogin = async (event) => {
+    event.preventDefault();
+    const username = event.target.username.value;
+    const password = event.target.password.value;
+    event.target.username.value = "";
+    event.target.password.value = "";
+    dispatch(loginUser(username, password));
+  };
+
   return (
     <div>
       <h3>Login</h3>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleLogin}>
         <div>
           username
-          <input
-            className="username-input"
-            type="text"
-            value={username}
-            onChange={handleUsernameChange}
-          />
+          <input name="username" className="username-input" type="text" />
         </div>
         <div>
           password
-          <input
-            className="password-input"
-            type="password"
-            value={password}
-            onChange={handlePasswordChange}
-          />
+          <input name="password" className="password-input" type="password" />
         </div>
         <button className="login-button" type="submit">
           login
@@ -36,14 +32,6 @@ const LoginForm = ({
       </form>
     </div>
   );
-};
-
-LoginForm.propTypes = {
-  handleSubmit: PropTypes.func.isRequired,
-  handleUsernameChange: PropTypes.func.isRequired,
-  handlePasswordChange: PropTypes.func.isRequired,
-  username: PropTypes.string.isRequired,
-  password: PropTypes.string.isRequired,
 };
 
 export default LoginForm;
