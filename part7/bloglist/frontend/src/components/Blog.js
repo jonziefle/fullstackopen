@@ -1,14 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import { incrementLike, removeBlog } from "../reducers/blogReducer";
+import { incrementLike, removeBlog, addComment } from "../reducers/blogReducer";
 import { setNotification } from "../reducers/notificationReducer";
 
 const Blog = ({ blog }) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
   const navigate = useNavigate();
+
+  const [newComment, setNewComment] = useState("");
+  const handleCommentChange = (event) => setNewComment(event.target.value);
 
   const handleLike = () => {
     try {
@@ -51,6 +54,13 @@ const Blog = ({ blog }) => {
     }
   };
 
+  const handleComment = (event) => {
+    event.preventDefault();
+    console.log(blog.id, newComment)
+    dispatch(addComment(blog.id, newComment));
+    setNewComment("");
+  };
+
   if (!blog) {
     return null;
   }
@@ -72,6 +82,26 @@ const Blog = ({ blog }) => {
             remove
           </button>
         )}
+      </div>
+      <div>
+        <h3>comments</h3>
+        <form className="comment-form" onSubmit={handleComment}>
+          <div>
+            <input
+              className="comment-input"
+              value={newComment}
+              onChange={handleCommentChange}
+            />
+            <button className="add-comment" type="submit">
+              add comment
+            </button>
+          </div>
+        </form>
+        <ul>
+          {blog.comments.map((comment, index) => (
+            <li key={index}>{comment}</li>
+          ))}
+        </ul>
       </div>
     </div>
   );

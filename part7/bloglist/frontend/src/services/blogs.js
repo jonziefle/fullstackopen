@@ -31,5 +31,10 @@ const remove = (id) => {
   return request.then((response) => response.data);
 };
 
-const exportedObject = { setToken, getAll, create, update, remove };
+const addComment = (id, comment) => {
+  const request = axios.put(`${baseUrl}/${id}/comments`, { comment }, config);
+  return request.then((response) => response.data);
+};
+
+const exportedObject = { setToken, getAll, create, update, remove, addComment };
 export default exportedObject;
