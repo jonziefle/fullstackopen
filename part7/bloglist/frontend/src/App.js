@@ -1,26 +1,43 @@
 import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Routes, Route, useMatch } from "react-router-dom";
 
+import Navigation from "./components/Navigation";
 import Notification from "./components/Notification";
 import LoginForm from "./components/LoginForm";
 import BlogForm from "./components/BlogForm";
 import BlogList from "./components/BlogList";
 import Togglable from "./components/Togglable";
 
+import UserList from "./components/UserList";
+import UserBlogList from "./components/UserBlogList";
+
 import { initializeUser, logoutUser } from "./reducers/authReducer";
+import { initializeUsers } from "./reducers/userReducer";
 import { initializeBlogs, createBlog } from "./reducers/blogReducer";
 import { setNotification } from "./reducers/notificationReducer";
 
 const App = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
+  const users = useSelector((state) => state.users);
+  const blogs = useSelector((state) => state.blogs);
 
   const blogFormRef = useRef();
 
   useEffect(() => {
     dispatch(initializeUser());
+    dispatch(initializeUsers());
     dispatch(initializeBlogs());
   }, [dispatch]);
+
+  const userIdMatch = useMatch("/users/:id");
+  const userDetails = userIdMatch
+    ? users.find((user) => user.id === userIdMatch.params.id)
+    : null;
+  const userBlogs = userIdMatch
+    ? blogs.filter((blog) => blog.user.id === userIdMatch.params.id)
+    : null;
 
   const addBlog = async (blog) => {
     try {
@@ -64,20 +81,32 @@ const App = () => {
     </>
   );
 
+  const Home = () => {
+    return (
+      <div>
+        {blogForm()}
+        <BlogList />
+      </div>
+    );
+  };
+
   return (
     <div>
+      <Navigation />
+
       <h2>Blog List App</h2>
       <Notification />
 
-      {user === null ? (
-        <div>{loginForm()}</div>
-      ) : (
-        <div>
-          {blogUser()}
-          {blogForm()}
-          <BlogList />
-        </div>
-      )}
+      {user === null ? <div>{loginForm()}</div> : <div>{blogUser()}</div>}
+
+      <Routes>
+        <Route
+          path="/users/:id"
+          element={<UserBlogList userDetails={userDetails} userBlogs={userBlogs} />}
+        />
+        <Route path="/users" element={<UserList />} />
+        <Route path="/" element={<Home />} />
+      </Routes>
     </div>
   );
 };
