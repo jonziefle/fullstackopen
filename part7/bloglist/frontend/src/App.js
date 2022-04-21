@@ -7,6 +7,7 @@ import Notification from "./components/Notification";
 import LoginForm from "./components/LoginForm";
 import BlogForm from "./components/BlogForm";
 import BlogList from "./components/BlogList";
+import Blog from "./components/Blog";
 import Togglable from "./components/Togglable";
 
 import UserList from "./components/UserList";
@@ -39,18 +40,21 @@ const App = () => {
     ? blogs.filter((blog) => blog.user.id === userIdMatch.params.id)
     : null;
 
+  const blogIdMatch = useMatch("/blogs/:id");
+  const blogDetails = blogIdMatch
+  ? blogs.find((blog) => blog.id === blogIdMatch.params.id)
+  : null;
+
   const addBlog = async (blog) => {
     try {
       blogFormRef.current.toggleVisibility();
       dispatch(createBlog(blog));
-      console.log("hello");
       dispatch(
         setNotification(
           `Added new blog "${blog.title}" by ${blog.author}`,
           "message"
         )
       );
-      console.log("bye");
     } catch (exception) {
       dispatch(
         setNotification(
@@ -93,18 +97,20 @@ const App = () => {
   return (
     <div>
       <Navigation />
-
-      <h2>Blog List App</h2>
       <Notification />
+      <h2>Blog List App</h2>
 
       {user === null ? <div>{loginForm()}</div> : <div>{blogUser()}</div>}
 
       <Routes>
         <Route
           path="/users/:id"
-          element={<UserBlogList userDetails={userDetails} userBlogs={userBlogs} />}
+          element={
+            <UserBlogList userDetails={userDetails} userBlogs={userBlogs} />
+          }
         />
         <Route path="/users" element={<UserList />} />
+        <Route path="/blogs/:id" element={<Blog blog={blogDetails} />} />
         <Route path="/" element={<Home />} />
       </Routes>
     </div>

@@ -1,7 +1,14 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
-import Blog from "./Blog";
+const BlogLink = ({ blog }) => {
+  return (
+    <div className="blog-link">
+      <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+    </div>
+  );
+};
 
 const BlogList = () => {
   const blogs = useSelector((state) => state.blogs);
@@ -12,10 +19,7 @@ const BlogList = () => {
       {[...blogs]
         .sort((a, b) => b.likes - a.likes)
         .map((blog) => (
-          <Blog
-            key={blog.id}
-            blog={blog}
-          />
+          <BlogLink key={blog.id} blog={blog} />
         ))}
     </div>
   );
