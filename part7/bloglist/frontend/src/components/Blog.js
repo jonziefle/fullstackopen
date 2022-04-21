@@ -1,5 +1,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 import { incrementLike, removeBlog } from "../reducers/blogReducer";
 import { setNotification } from "../reducers/notificationReducer";
@@ -7,6 +8,7 @@ import { setNotification } from "../reducers/notificationReducer";
 const Blog = ({ blog }) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
+  const navigate = useNavigate();
 
   const handleLike = () => {
     try {
@@ -37,6 +39,7 @@ const Blog = ({ blog }) => {
             "message"
           )
         );
+        navigate("/");
       } catch (exception) {
         dispatch(
           setNotification(
@@ -55,19 +58,21 @@ const Blog = ({ blog }) => {
   return (
     <div className="blog">
       <h2>{`"${blog.title}" by ${blog.author}`}</h2>
-      <a href={blog.url}></a>
+      <a href={blog.url}>{blog.url}</a>
       <div>
-        {blog.likes} likes
+        <span>{blog.likes} likes</span>
         <button className="like-button" onClick={handleLike}>
           like
         </button>
       </div>
-      <div>added by {blog.user ? blog.user.name : ""}</div>
-      {blog.user && blog.user.username === user.username && (
-        <button className="remove-button" onClick={handleRemove}>
-          remove
-        </button>
-      )}
+      <div>
+        <div>added by {blog.user ? blog.user.name : ""}</div>
+        {blog.user && blog.user.username === user.username && (
+          <button className="remove-button" onClick={handleRemove}>
+            remove
+          </button>
+        )}
+      </div>
     </div>
   );
 };

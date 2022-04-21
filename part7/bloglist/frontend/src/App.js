@@ -13,7 +13,7 @@ import Togglable from "./components/Togglable";
 import UserList from "./components/UserList";
 import UserBlogList from "./components/UserBlogList";
 
-import { initializeUser, logoutUser } from "./reducers/authReducer";
+import { initializeUser } from "./reducers/authReducer";
 import { initializeUsers } from "./reducers/userReducer";
 import { initializeBlogs, createBlog } from "./reducers/blogReducer";
 import { setNotification } from "./reducers/notificationReducer";
@@ -42,8 +42,8 @@ const App = () => {
 
   const blogIdMatch = useMatch("/blogs/:id");
   const blogDetails = blogIdMatch
-  ? blogs.find((blog) => blog.id === blogIdMatch.params.id)
-  : null;
+    ? blogs.find((blog) => blog.id === blogIdMatch.params.id)
+    : null;
 
   const addBlog = async (blog) => {
     try {
@@ -77,18 +77,10 @@ const App = () => {
     </Togglable>
   );
 
-  const blogUser = () => (
-    <>
-      <h3>User</h3>
-      {user.name} logged-in
-      <button onClick={() => dispatch(logoutUser(user))}>logout</button>
-    </>
-  );
-
   const Home = () => {
     return (
       <div>
-        {blogForm()}
+        {user === null ? loginForm() : blogForm()}
         <BlogList />
       </div>
     );
@@ -99,8 +91,6 @@ const App = () => {
       <Navigation />
       <Notification />
       <h2>Blog List App</h2>
-
-      {user === null ? <div>{loginForm()}</div> : <div>{blogUser()}</div>}
 
       <Routes>
         <Route
