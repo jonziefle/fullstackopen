@@ -44,7 +44,7 @@ export const loginUser = (username, password) => {
 
       blogService.setToken(user.token);
       dispatch(login(user));
-      dispatch(setNotification(`${user.name} is logged in`, "message"));
+      dispatch(setNotification(`${user.name} is logged in`, "success"));
     } catch (exception) {
       dispatch(setNotification(`Unable to login ${username}`, "error"));
     }
@@ -56,7 +56,7 @@ export const logoutUser = (user) => {
     window.localStorage.removeItem("authorizedUser");
     blogService.setToken(null);
     dispatch(logout());
-    dispatch(setNotification(`${user.username} logged out`, "message"));
+    dispatch(setNotification(`${user.username} logged out`, "success"));
   };
 };
 

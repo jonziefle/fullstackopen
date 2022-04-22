@@ -1,6 +1,9 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+
+import { AppBar, Toolbar, Button } from "@mui/material";
+
 import { logoutUser } from "../reducers/authReducer";
 
 const Navigation = () => {
@@ -13,29 +16,29 @@ const Navigation = () => {
     navigate("/");
   };
 
-  const padding = {
-    paddingRight: 5,
-  };
-
   return (
-    <div>
-      <Link style={padding} to="/">
-        blogs
-      </Link>
-      <Link style={padding} to="/users">
-        users
-      </Link>
-      {user ? (
-        <span>
-          {user.name} logged-in
-          <button onClick={handleLogout}>logout</button>
-        </span>
-      ) : (
-        <Link style={padding} to="/">
-          login
-        </Link>
-      )}
-    </div>
+    <AppBar position="static">
+      <Toolbar>
+        <Button color="inherit" component={Link} to="/">
+          blogs
+        </Button>
+        <Button color="inherit" component={Link} to="/users">
+          notes
+        </Button>
+        {user ? (
+          <span>
+            <Button color="secondary" onClick={handleLogout}>
+              logout
+            </Button>
+            {user.name} logged-in
+          </span>
+        ) : (
+          <Button color="secondary" component={Link} to="/">
+            login
+          </Button>
+        )}
+      </Toolbar>
+    </AppBar>
   );
 };
 

@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
+import { Button, TextField } from "@mui/material";
+
 import { incrementLike, removeBlog, addComment } from "../reducers/blogReducer";
 import { setNotification } from "../reducers/notificationReducer";
 
@@ -19,7 +21,7 @@ const Blog = ({ blog }) => {
       dispatch(
         setNotification(
           `Added like to "${blog.title}" by ${blog.author}`,
-          "message"
+          "success"
         )
       );
     } catch (exception) {
@@ -39,7 +41,7 @@ const Blog = ({ blog }) => {
         dispatch(
           setNotification(
             `Deleted "${blog.title}" by ${blog.author}`,
-            "message"
+            "success"
           )
         );
         navigate("/");
@@ -56,7 +58,6 @@ const Blog = ({ blog }) => {
 
   const handleComment = (event) => {
     event.preventDefault();
-    console.log(blog.id, newComment)
     dispatch(addComment(blog.id, newComment));
     setNewComment("");
   };
@@ -71,31 +72,51 @@ const Blog = ({ blog }) => {
       <a href={blog.url}>{blog.url}</a>
       <div>
         <span>{blog.likes} likes</span>
-        <button className="like-button" onClick={handleLike}>
-          like
-        </button>
       </div>
       <div>
         <div>added by {blog.user ? blog.user.name : ""}</div>
+        <Button
+          variant="contained"
+          color="primary"
+          size="small"
+          className="like-button"
+          onClick={handleLike}
+        >
+          like
+        </Button>
         {blog.user && blog.user.username === user.username && (
-          <button className="remove-button" onClick={handleRemove}>
+          <Button
+            variant="contained"
+            color="error"
+            size="small"
+            className="remove-button"
+            onClick={handleRemove}
+          >
             remove
-          </button>
+          </Button>
         )}
       </div>
       <div>
         <h3>comments</h3>
         <form className="comment-form" onSubmit={handleComment}>
           <div>
-            <input
+            <TextField
+              label="comment"
+              size="small"
               className="comment-input"
               value={newComment}
               onChange={handleCommentChange}
             />
-            <button className="add-comment" type="submit">
-              add comment
-            </button>
           </div>
+          <Button
+              variant="contained"
+              color="primary"
+              size="small"
+              className="add-comment"
+              type="submit"
+            >
+              add comment
+            </Button>
         </form>
         <ul>
           {blog.comments.map((comment, index) => (

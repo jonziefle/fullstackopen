@@ -2,6 +2,8 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../reducers/authReducer";
 
+import { TextField, Button } from "@mui/material";
+
 const LoginForm = () => {
   const dispatch = useDispatch();
 
@@ -19,16 +21,32 @@ const LoginForm = () => {
       <h3>Login</h3>
       <form onSubmit={handleLogin}>
         <div>
-          username
-          <input name="username" className="username-input" type="text" />
+          <TextField
+            label="username"
+            size="small"
+            name="username"
+            className="username-input"
+            type="text"
+          />
         </div>
         <div>
-          password
-          <input name="password" className="password-input" type="password" />
+          <TextField
+            label="password"
+            size="small"
+            name="password"
+            className="password-input"
+            type="password"
+          />
         </div>
-        <button className="login-button" type="submit">
+        <Button
+          variant="contained"
+          size="small"
+          color="primary"
+          className="login-button"
+          type="submit"
+        >
           login
-        </button>
+        </Button>
       </form>
     </div>
   );

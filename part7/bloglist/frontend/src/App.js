@@ -2,6 +2,8 @@ import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Routes, Route, useMatch } from "react-router-dom";
 
+import { Container } from "@mui/material";
+
 import Navigation from "./components/Navigation";
 import Notification from "./components/Notification";
 import LoginForm from "./components/LoginForm";
@@ -52,7 +54,7 @@ const App = () => {
       dispatch(
         setNotification(
           `Added new blog "${blog.title}" by ${blog.author}`,
-          "message"
+          "success"
         )
       );
     } catch (exception) {
@@ -87,9 +89,10 @@ const App = () => {
   };
 
   return (
-    <div>
-      <Navigation />
+    <Container>
       <Notification />
+      <Navigation />
+      
       <h2>Blog List App</h2>
 
       <Routes>
@@ -103,7 +106,7 @@ const App = () => {
         <Route path="/blogs/:id" element={<Blog blog={blogDetails} />} />
         <Route path="/" element={<Home />} />
       </Routes>
-    </div>
+    </Container>
   );
 };
 
