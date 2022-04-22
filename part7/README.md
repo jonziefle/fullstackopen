@@ -10,3 +10,14 @@ The seventh part of the course touches on several different themes. First, we'll
 * [Exercises: extending the bloglist](https://fullstackopen.com/en/part7/exercises_extending_the_bloglist)
 
 ## Exercises:
+### **7.1-7.3: Anecdotes with React Router**
+Adding routing to the anecdote app.
+* https://fullstackopen.com/en/part7/react_router#exercises-7-1-7-3
+
+### **7.4-7.8: Anecdotes with Hooks**
+Adding custom hooks to the anecdote app.
+* https://fullstackopen.com/en/part7/custom_hooks#exercises-7-4-7-8
+
+### **7.9-7.21: Extending the Bloglist**
+Extend the bloglist application from parts 4 and 5.
+* https://fullstackopen.com/en/part7/exercises_extending_the_bloglist
