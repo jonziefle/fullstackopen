@@ -4,7 +4,7 @@ import Select from "react-select";
 
 import { GET_ALL_AUTHORS, EDIT_BIRTHYEAR } from "../queries";
 
-const Authors = (props) => {
+const Authors = ({ show, token }) => {
   const [selectedName, setSelectedName] = useState(null);
   const [year, setYear] = useState("");
 
@@ -12,14 +12,6 @@ const Authors = (props) => {
   const [editBirthyear] = useMutation(EDIT_BIRTHYEAR, {
     refetchQueries: [{ query: GET_ALL_AUTHORS }],
   });
-
-  if (!props.show) {
-    return null;
-  }
-
-  if (result.loading) {
-    return <div>loading...</div>;
-  }
 
   const handleSetBirthyear = (event) => {
     event.preventDefault();
@@ -29,6 +21,14 @@ const Authors = (props) => {
     setSelectedName(null);
     setYear("");
   };
+
+  if (!show) {
+    return null;
+  }
+
+  if (result.loading) {
+    return <div>loading...</div>;
+  }
 
   return (
     <div>
@@ -50,31 +50,35 @@ const Authors = (props) => {
         </tbody>
       </table>
 
-      <h3>Set birthyear</h3>
-      <form onSubmit={handleSetBirthyear}>
-        <div>
-          <label>
-            Name:
-            <Select
-              options={result.data.allAuthors.map((a) => ({
-                value: a.name,
-                label: a.name,
-              }))}
-              onChange={setSelectedName}
-            />
-          </label>
-        </div>
-        <div>
-          <label>
-            Birthyear:
-            <input
-              value={year}
-              onChange={({ target }) => setYear(Number(target.value))}
-            />
-          </label>
-        </div>
-        <button type="submit">change number</button>
-      </form>
+      {token && (
+        <>
+          <h3>Set birthyear</h3>
+          <form onSubmit={handleSetBirthyear}>
+            <div>
+              <label>
+                Name:
+                <Select
+                  options={result.data.allAuthors.map((a) => ({
+                    value: a.name,
+                    label: a.name,
+                  }))}
+                  onChange={setSelectedName}
+                />
+              </label>
+            </div>
+            <div>
+              <label>
+                Birthyear:
+                <input
+                  value={year}
+                  onChange={({ target }) => setYear(Number(target.value))}
+                />
+              </label>
+            </div>
+            <button type="submit">change number</button>
+          </form>
+        </>
+      )}
     </div>
   );
 };
