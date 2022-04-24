@@ -4,6 +4,7 @@ import { useApolloClient } from "@apollo/client";
 import Navigation from "./components/Navigation";
 import Authors from "./components/Authors";
 import Books from "./components/Books";
+import Recommendations from "./components/Recommendations";
 import LoginForm from "./components/LoginForm";
 import NewBook from "./components/NewBook";
 
@@ -25,6 +26,7 @@ const App = () => {
       <Navigation setPage={setPage} token={token} logout={logout} />
       <Authors show={page === "authors"} token={token} />
       <Books show={page === "books"} />
+      <Recommendations show={page === "recommendations"} />
       <LoginForm
         show={page === "login"}
         setToken={setToken}

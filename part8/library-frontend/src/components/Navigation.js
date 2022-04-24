@@ -6,6 +6,7 @@ const Navigation = ({ setPage, token, logout }) => {
       {token ? (
         <>
           <button onClick={() => setPage("add")}>add book</button>
+          <button onClick={() => setPage("recommendations")}>recommendations</button>
           <button onClick={logout}>logout</button>
         </>
       ) : (
