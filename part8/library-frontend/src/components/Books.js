@@ -1,45 +1,59 @@
 import { useState, useEffect } from "react";
-import { useQuery } from "@apollo/client";
+import { useQuery, useLazyQuery } from "@apollo/client";
 
-import { GET_ALL_BOOKS } from "../queries";
+import { GET_ALL_BOOKS, GET_ALL_BOOKS_BY_GENRE } from "../queries";
 
 const Books = ({ show }) => {
   const [genreList, setGenreList] = useState([]);
-  const [genreFilter, setGenreFilter] = useState("");
-  const result = useQuery(GET_ALL_BOOKS);
+  const [genreFilter, setGenreFilter] = useState("all genres");
+  const [booksList, setBooksList] = useState([]);
+  const [booksByGenreList, setBooksByGenreList] = useState([]);
+
+  const books = useQuery(GET_ALL_BOOKS);
+  const [getBooksByGenre, booksByGenre] = useLazyQuery(GET_ALL_BOOKS_BY_GENRE);
 
   useEffect(() => {
-    if (result.data) {
-      let genreListTemp = [];
-      result.data.allBooks.forEach((book) => {
-          book.genres.forEach((genre) => {
-              if (!genreListTemp.includes(genre)) {
-                genreListTemp.push(genre);
-              }
-          })
+    if (books.data) {
+      setBooksList(books.data.allBooks);
+
+      // set genres for buttons
+      let genreTemp = [];
+      books.data.allBooks.forEach((book) => {
+        book.genres.forEach((genre) => {
+          if (!genreTemp.includes(genre)) {
+            genreTemp.push(genre);
+          }
+        });
       });
-      
-      setGenreList(genreListTemp);
-      setGenreFilter("all genres");
+      setGenreList(genreTemp);
     }
-  }, [result.data]); // eslint-disable-line
+  }, [books.data]); // eslint-disable-line
+
+  useEffect(() => {
+    if (booksByGenre.data) {
+      setBooksByGenreList(booksByGenre.data.allBooks);
+    }
+  }, [booksByGenre.data]); // eslint-disable-line
+
+  const changeGenre = async (genre) => {
+    setGenreFilter(genre);
+    if (genre !== "all genres") {
+      getBooksByGenre({ variables: { genre } });
+    }
+  };
 
   const filteredBooks = () => {
     if (genreFilter !== "all genres") {
-      return result.data.allBooks.filter((book) => {
-        return book.genres.find((genre) => {
-          return genre.toLowerCase() === genreFilter.toLowerCase();
-        });
-      });
+      return booksByGenreList;
     }
-    return result.data.allBooks;
+    return booksList;
   };
 
   if (!show) {
     return null;
   }
 
-  if (result.loading) {
+  if (booksList.loading) {
     return <div>loading...</div>;
   }
 
@@ -67,11 +81,11 @@ const Books = ({ show }) => {
       </table>
       <div>
         {genreList.map((genre) => (
-          <button key={genre} onClick={() => setGenreFilter(genre)}>
+          <button key={genre} onClick={() => changeGenre(genre)}>
             {genre}
           </button>
         ))}
-        <button onClick={() => setGenreFilter("all genres")}>all genres</button>
+        <button onClick={() => changeGenre("all genres")}>all genres</button>
       </div>
     </div>
   );

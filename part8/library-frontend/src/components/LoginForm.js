@@ -1,25 +1,35 @@
 import { useState, useEffect } from "react";
-import { useMutation } from "@apollo/client";
-import { LOGIN } from "../queries";
+import { useLazyQuery, useMutation } from "@apollo/client";
+import { LOGIN, GET_ME } from "../queries";
 
-const LoginForm = ({ show, setError, setToken, setPage }) => {
+const LoginForm = ({ show, setError, setToken, setUser, setPage }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const [login, result] = useMutation(LOGIN, {
+  const [getUser, userResult] = useLazyQuery(GET_ME);
+  const [login, loginResult] = useMutation(LOGIN, {
     onError: (error) => {
       setError(error.graphQLErrors[0].message);
     },
   });
 
+  // set token
   useEffect(() => {
-    if (result.data) {
-      const token = result.data.login.value;
+    if (loginResult.data) {
+      const token = loginResult.data.login.value;
       setToken(token);
       localStorage.setItem("library-user-token", token);
       setPage("authors");
+      getUser({});
     }
-  }, [result.data]); // eslint-disable-line
+  }, [loginResult.data]); // eslint-disable-line
+
+  // set user info
+  useEffect(() => {
+    if (userResult.data) {
+      setUser(userResult);
+    }
+  }, [userResult.data]); // eslint-disable-line
 
   const submit = async (event) => {
     event.preventDefault();
