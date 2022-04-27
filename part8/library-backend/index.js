@@ -6,12 +6,14 @@ const express = require("express");
 const http = require("http");
 const { execute, subscribe } = require("graphql");
 const { SubscriptionServer } = require("subscriptions-transport-ws");
+const DataLoader = require("dataloader");
 
 const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
 
 const User = require("./models/user");
 
+const { batchBooks } = require("./loaders");
 const typeDefs = require("./schema");
 const resolvers = require("./resolvers");
 
@@ -52,14 +54,23 @@ const start = async () => {
   const server = new ApolloServer({
     schema,
     context: async ({ req }) => {
+      let currentUser = null;
       const auth = req ? req.headers.authorization : null;
       if (auth && auth.toLowerCase().startsWith("bearer ")) {
         const decodedToken = jwt.verify(
           auth.substring(7),
           process.env.JWT_SECRET
         );
-        const currentUser = await User.findById(decodedToken.id);
-        return { currentUser };
+        currentUser = await User.findById(decodedToken.id);
+      }
+
+      if (req) {
+        return {
+          currentUser,
+          loaders: {
+            books: new DataLoader((authors) => batchBooks(authors)),
+          },
+        };
       }
     },
     plugins: [

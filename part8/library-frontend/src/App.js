@@ -8,7 +8,23 @@ import Recommendations from "./components/Recommendations";
 import LoginForm from "./components/LoginForm";
 import NewBook from "./components/NewBook";
 
-import { BOOK_ADDED } from "./queries";
+import { BOOK_ADDED, GET_ALL_BOOKS } from "./queries";
+
+// function that takes care of manipulating cache
+export const updateCache = (cache, query, addedBook) => {
+  const uniqueByTitle = (a) => {
+    let seen = new Set();
+    return a.filter((item) => {
+      let k = item.title;
+      return seen.has(k) ? false : seen.add(k);
+    });
+  };
+  cache.updateQuery(query, ({ allBooks }) => {
+    return {
+      allBooks: uniqueByTitle(allBooks.concat(addedBook)),
+    };
+  });
+};
 
 const App = () => {
   const [token, setToken] = useState(null);
@@ -21,7 +37,7 @@ const App = () => {
     onSubscriptionData: ({ subscriptionData }) => {
       const addedBook = subscriptionData.data.bookAdded;
       window.alert(`${addedBook.title} added`);
-      console.log(addedBook);
+      updateCache(client.cache, { query: GET_ALL_BOOKS }, addedBook);
     },
   });
 

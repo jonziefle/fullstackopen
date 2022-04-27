@@ -38,14 +38,17 @@ const resolvers = {
 
       return Book.find({}).populate("author");
     },
-    allAuthors: async () => Author.find({}),
+    allAuthors: async () => {
+      return Author.find({});
+    },
     me: (root, args, context) => {
       return context.currentUser;
     },
   },
   Author: {
-    bookCount: async (root) => {
-      return Book.find({ author: root.id }).count();
+    bookCount: async (root, args, { loaders }) => {
+      const books = await loaders.books.load(root.id);
+      return books.length;
     },
   },
   Mutation: {

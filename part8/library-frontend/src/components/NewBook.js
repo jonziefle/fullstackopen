@@ -8,6 +8,8 @@ import {
   GET_ALL_BOOKS_BY_GENRE,
 } from "../queries";
 
+import { updateCache } from "../App";
+
 const NewBook = ({ show, user }) => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
@@ -18,11 +20,8 @@ const NewBook = ({ show, user }) => {
   const [addNewBook] = useMutation(ADD_NEW_BOOK, {
     refetchQueries: [{ query: GET_ALL_AUTHORS }],
     update: (cache, response) => {
-      cache.updateQuery({ query: GET_ALL_BOOKS }, ({ allBooks }) => {
-        return {
-          allBooks: allBooks.concat(response.data.addBook),
-        };
-      });
+      updateCache(cache, { query: GET_ALL_BOOKS }, response.data.addBook);
+      
       cache.updateQuery(
         {
           query: GET_ALL_BOOKS_BY_GENRE,
